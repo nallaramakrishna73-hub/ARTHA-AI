@@ -1,30 +1,7 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ARTHA AI</title><style>body{margin:0;background:#070F1F;color:#E6EDF7;font:16px/1.65 Inter,Segoe UI,Helvetica,Arial,sans-serif}
-.wrap{max-width:980px;margin:0 auto;padding:28px 20px 60px}
-h1{font-size:44px;margin:8px 0 0}h2{margin-top:44px;padding-bottom:8px;border-bottom:2px solid #FF9933;color:#fff}h3{color:#FF9933}
-a{color:#FF9933}img{max-width:100%;border-radius:12px}
-table{border-collapse:collapse;width:100%;margin:14px 0}th,td{border:1px solid #1d3a66;padding:8px 12px;text-align:left;vertical-align:top}
-th{background:#0B1F3A}tr:nth-child(even) td{background:#0b1a33}
-code{background:#0B1F3A;color:#ffc680;padding:2px 6px;border-radius:5px;font-size:.92em}
-pre{background:#0B1F3A;border:1px solid #1d3a66;border-radius:10px;padding:16px;overflow:auto}pre code{background:none;padding:0;color:#E6EDF7}
-blockquote{margin:16px 0;padding:12px 18px;background:#1a1409;border-left:4px solid #FF9933;border-radius:6px}
-sub{color:#8FA0B8}hr{border:0;border-top:1px solid #1d3a66;margin:40px 0 16px}</style></head><body><div class="wrap">
-<p align="center"><img src="assets/banner.svg" alt="ARTHA AI banner" width="100%"></p>
-
-<p align="center">
-<img src="https://img.shields.io/badge/Python-3.11+-3776AB?logo=python&logoColor=white" alt="Python">
-<img src="https://img.shields.io/badge/FastAPI-009688?logo=fastapi&logoColor=white" alt="FastAPI">
-<img src="https://img.shields.io/badge/LangGraph-agents-7C3AED" alt="LangGraph">
-<img src="https://img.shields.io/badge/Next.js-000000?logo=nextdotjs&logoColor=white" alt="Next.js">
-<img src="https://img.shields.io/badge/TypeScript-3178C6?logo=typescript&logoColor=white" alt="TypeScript">
-<img src="https://img.shields.io/badge/Market-NSE%20%7C%20BSE-FF9933" alt="NSE BSE">
-<img src="https://img.shields.io/badge/Not%20investment%20advice-red" alt="Not investment advice">
-</p>
-
-<h1 align="center">ARTHA AI</h1>
+<h1 align="center">🪔 ARTHA AI</h1>
 <p align="center"><b>AI-Powered Indian Financial Research &amp; Intelligence Platform</b><br>
+<sub>Python · FastAPI · LangGraph · Next.js · TypeScript · NSE / BSE</sub><br>
 <i>Artha (अर्थ) = wealth / economic value</i></p>
-
-<p align="center"><img src="assets/dashboard-preview.svg" alt="ARTHA AI dashboard preview" width="90%"><br><sub>Dashboard layout illustration. Replace with a real screenshot (see Screenshots).</sub></p>
 
 <h2>Overview</h2>
 <p>ARTHA AI is an agentic financial research platform for the Indian stock market. Instead of a basic price chatbot, it works like a research analyst: ask <code>Analyze RELIANCE</code> and a LangGraph workflow gathers market data, technical indicators, fundamentals, news sentiment, macro indicators, risk metrics and portfolio context, then writes an evidence-based report with analytical scores, bull/bear cases, risks and sources.</p>
@@ -46,19 +23,38 @@ sub{color:#8FA0B8}hr{border:0;border-top:1px solid #1d3a66;margin:40px 0 16px}</
 </table>
 <p><sub>Keep only the rows that are actually implemented in your build. Move the rest to the Roadmap.</sub></p>
 
-<h2>Screenshots</h2>
-<p>Save your real screenshots in <code>docs/screenshots/</code> and update the paths below.</p>
-<table>
-<tr><td align="center"><img src="docs/screenshots/dashboard.png" alt="Dashboard" width="100%"><br><sub>Dashboard</sub></td>
-<td align="center"><img src="docs/screenshots/analysis.png" alt="Stock analysis" width="100%"><br><sub>Stock analysis</sub></td></tr>
-<tr><td align="center"><img src="docs/screenshots/portfolio.png" alt="Portfolio" width="100%"><br><sub>Portfolio &amp; optimiser</sub></td>
-<td align="center"><img src="docs/screenshots/report.png" alt="Research report" width="100%"><br><sub>Research report / PDF</sub></td></tr>
-</table>
+## Architecture
 
-<h2>Architecture</h2>
-<p align="center"><img src="assets/architecture.svg" alt="System architecture" width="100%"></p>
-<h3>Agent workflow (LangGraph)</h3>
-<p align="center"><img src="assets/agent-workflow.svg" alt="Agent workflow" width="100%"></p>
+```mermaid
+flowchart TB
+    UI["Next.js Dashboard<br/>Stock research | Compare | Portfolio | Macro | Reports | AI chat"]
+    GW["FastAPI Gateway<br/>JWT auth | Rate limiting | Validation"]
+    AG["LangGraph Research Agent"]
+    AN["Analysis Engines<br/>Technical | Fundamental | Sentiment | Risk | MPT optimiser"]
+    DE["Data Engine - Provider Router<br/>Cache > Primary > Fallback > Demo data"]
+    SRC["Yahoo Finance | Alpha Vantage | FMP | NewsAPI | RBI / MoSPI"]
+    DB[("PostgreSQL / SQLite<br/>Redis cache")]
+    UI --> GW --> AG
+    AG --> AN
+    AG --> DE
+    AN --> DE
+    DE --> SRC
+    GW --> DB
+    DE --> DB
+```
+
+### Agent workflow (LangGraph)
+
+```mermaid
+flowchart LR
+    P["1. Planner<br/>intent + symbols"] --> G["2. Gather (parallel)<br/>Market | Fundamentals | News | Macro"]
+    G --> A["3. Analyse<br/>Technical | Sentiment | Risk | Portfolio"]
+    A --> S["4. Score<br/>0-100 analytical score"]
+    S --> W["5. Write<br/>LLM synthesizer + number validator"]
+    W --> C["6. Govern<br/>Compliance + disclaimer"]
+    C --> R["Final report / PDF"]
+```
+
 <p>All numbers come from tools and are stored in the agent state. The LLM only explains that evidence. A validator rejects figures that are not in the evidence, and a compliance node removes advice-style language and appends the disclaimer.</p>
 
 <h2>Tech Stack</h2>
@@ -163,4 +159,3 @@ Built for the Capabl Financial Research AI Agent Development project (Track B).<
 
 <hr>
 <p align="center"><sub>ARTHA AI - research and analytics only. Not investment advice.</sub></p>
-</div></body></html>
